@@ -5,14 +5,14 @@ data:
   init_args:
     train_params:
       filelist_path: "./data/train.list"
-      sampling_rate: 16000
+      sampling_rate: 24000
       num_samples: 48000
       batch_size: 16  # 20
       num_workers: 16
 
     val_params:
       filelist_path: "./data/valid.list"
-      sampling_rate: 16000
+      sampling_rate: 24000
       num_samples: 48000
       batch_size: 4   # 10
       num_workers: 8
@@ -20,7 +20,7 @@ data:
 model:
   class_path: decoder.experiment.SnacVocos
   init_args:
-    sample_rate: 16000
+    sample_rate: 24000
     initial_learning_rate: 2e-4
     mel_loss_coeff: 45
     mrd_loss_coeff: 1.0
@@ -87,11 +87,11 @@ trainer:
 
   # Lightning calculates max_steps across all optimizer steps (rather than number of batches)
   # This equals to 1M steps per generator and 1M per discriminator
-  val_check_interval: 5000
+  val_check_interval: 25  # Reduced to work with small dataset (29 batches)
   max_steps: 200000000
   # You might want to limit val batches when evaluating all the metrics, as they are time-consuming
   limit_val_batches: 100
   accelerator: gpu
   strategy: ddp
-  devices: [0,1,2,3]
+  devices: [0,1]
   log_every_n_steps: 1000
